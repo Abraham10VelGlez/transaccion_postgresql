@@ -61,3 +61,39 @@ COMMIT;
 Ejecución en Herramientas GUI
 Si estás usando una herramienta GUI como DBeaver, puedes ejecutar estos comandos en el editor de consultas SQL proporcionado por la herramienta.
 
+
+-- DROP FUNCTION public.validauser(varchar, varchar, varchar);
+
+CREATE OR REPLACE FUNCTION public.validauser(us character varying, pass character varying, em character varying)
+ RETURNS TABLE(idx bigint, namex character varying, emailxx character varying, passwordxx character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY SELECT id, "name", "email", "password" FROM users WHERE email = em  and name = us ;
+END;
+$function$
+;
+
+
+CREATE OR REPLACE FUNCTION public.validauser(us character varying, pass character varying,em character varying)
+  RETURNS TABLE(idx bigint, namex character varying, emailxx character varying, passwordxx character varying) AS
+$BODY$
+BEGIN
+    --RETURN QUERY SELECT id, "name", "email", "password" FROM users WHERE email = em  and name = us ;
+	RETURN QUERY SELECT id, "name", "email", "password" FROM users WHERE email = em  ;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;
+ 
+ 
+ALTER FUNCTION public.avgigecem(character varying, character varying)
+  OWNER TO postgres;
+
+--json
+select public.validauser('abrahgam','$2b$10$doX63oF1EW8sMYctlUjB3u4TcIQ2Xv6YYDqYC/kTzSdjh5zpdj3Cq','creors@gmail.com')
+
+--table
+select * from  public.validauser('abrahgam','$2b$10$doX63oF1EW8sMYctlUjB3u4TcIQ2Xv6YYDqYC/kTzSdjh5zpdj3Cq','creors@gmail.com')
+
